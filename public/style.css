@@ -1,0 +1,127 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.column {
+  float: left;
+  padding: 10px;
+  height: 900px;
+}
+
+.menu {
+  width: 25%;
+  background-color:#aaa;
+}
+
+.collapsible {
+  margin-top: 10px;
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+  text-align: left;
+}
+ #channels {
+  margin: 10px 0px 10px 0px;
+  list-style-type: none;
+ }
+
+ul{
+    list-style-type: none;
+}
+li{
+    margin-top:5px;
+}
+.avatar {
+    width: 40px;
+    height: 5vh;
+    border-radius: 50%;
+}
+/* Clear floats after the columns */
+.container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.chatBox {
+  width: 75%;
+  background-color:white;
+}
+.wrapper {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.wrapper::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.wrapper img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.wrapper img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+
+.column .chatBox{
+    position: relative;
+}
+.chatBox textarea{
+position: absolute;
+ bottom: 0;
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  resize: none;
+}
