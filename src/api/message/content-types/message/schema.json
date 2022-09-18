@@ -13,7 +13,8 @@
   "pluginOptions": {},
   "attributes": {
     "Text": {
-      "type": "richtext"
+      "type": "richtext",
+      "required": true
     },
     "image": {
       "type": "media",
@@ -27,7 +28,7 @@
       ]
     },
     "timeStamp": {
-      "type": "time"
+      "type": "datetime"
     },
     "sender": {
       "type": "relation",
