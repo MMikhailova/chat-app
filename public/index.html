@@ -13,6 +13,7 @@
         <button class="collapsible">Channels</button>
         <div class="content">
             <ul id="channels">
+            
             </ul>
         </div>
         <button class="collapsible">Direct messages</button>
@@ -23,9 +24,11 @@
     <div class="column chatBox">
         <h2 id="recipient"></h2>
         <div id="chat"></div>
-   <form>
-  <textarea id="to">#All about API message...</textarea>
+   <form id="msg">
+  <textarea id="message" name="msg_form">#All about API message...</textarea>
+ <input id="submitMsg" type="submit" name="msg_form" value="Submit">
   </form>
+   
     </div>
   <script src="./index.js"></script>
   
