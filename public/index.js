@@ -6,10 +6,15 @@ const chatBox = document.getElementById("chat")
 const btnSubmit = document.getElementById("submitMsg")
 const messageText = document.getElementById("message");
 let activeChat = {}
-
+let jwt=''
 
 async function getUsers() {
-    const response = await fetch(`http://localhost:1337/api/clients?populate=avatar`);
+    const response = await fetch(`http://localhost:1337/api/clients?populate=avatar`,{
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${jwt}`
+        }
+    });
     const result = await response.json();
     const users = result.data
     console.log(users)
@@ -22,10 +27,15 @@ async function getUsers() {
     }))
     ulMenuDm.innerHTML=liTag
 }
-getUsers();
+// getUsers();
 
 async function getChannels() {
-  const response = await fetch(`http://localhost:1337/api/channels`);
+  const response = await fetch(`http://localhost:1337/api/channels`,{
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${jwt}`
+        }
+    });
   const result = await response.json();
   const channels = result.data;
   let liTag = "";
@@ -37,7 +47,7 @@ async function getChannels() {
   ulMenuChannels.innerHTML = liTag;
 
 }
-getChannels();
+// getChannels();
 
    let coll = document.getElementsByClassName("collapsible");
     let i;
@@ -61,13 +71,17 @@ function openChat(event) {
 
 async function getMessages(chatName){
     const response = await fetch(
-      `http://localhost:1337/api/messages?populate=channel,sender&filters[channel][name][$eq]=${chatName}&sort[0]=timeStamp%3Aasc`
-    );
+      `http://localhost:1337/api/messages?populate=channel,sender&filters[channel][name][$eq]=${chatName}&sort[0]=timeStamp%3Aasc`,{
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${jwt}`
+        }
+    });
     const result = await response.json();
     const data = result.data;
-    console.log(data)
+  console.log(data)
   let divTag = ""
-  if(data.length===0) return
+  // if(data.length===0) return
   data.forEach((obj => {
         const timeStamp = new Date(obj.attributes.timeStamp)
         const time = timeStamp.getHours() + ":" + timeStamp.getMinutes();
@@ -87,7 +101,6 @@ async function getMessages(chatName){
 }
 
 async function sendMessage() {
-  debugger;
   const userInput = messageText.value;
   const formattedTime = new Date();
   const body = {
@@ -104,40 +117,39 @@ async function sendMessage() {
   };
   const url = `http://localhost:1337/api/messages`;
   const response = await fetch(url, {
-    method: `POST`, // *GET, POST, PUT, DELETE, etc.
+    method: `POST`, 
     headers: {
+      "Authorization": `Bearer ${jwt}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
   })
-    .then(()=>{getMessages(activeChat.name)})
-  
-  //     const response = await fetch(
-  //         `http://localhost:1337/api/channels?filters[name][$eq]=All about API`
-  //     );
-
-  //     const timeMsg = new Date()
-  //     const formatedTime= timeMsg. getHours() + ":" + timeMsg.getMinutes()
-  //     const path = `messages`;
-  //   const body = {
-  //     data: {
-  //       Text: `${userInput}`,
-  //       timeStamp: `${formatedTime}`,
-  //     },
-  //   };
-  //   const url = `http://localhost:1337/api/${path}`;
-  //   const response = await fetch(url, {
-  //     method: `POST`, // *GET, POST, PUT, DELETE, etc.
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(body),
-  //   });
-  //   return response.json();
-  // }
+    .then(() => { getMessages(activeChat.name) })
+  .catch(()=>alert('Please log in!'))
 }
 
 btnSubmit.addEventListener("click", function (e) {
     e.preventDefault();
     sendMessage()
 });
+
+async function authentic() {
+    const username = prompt("username");
+  const password = prompt("password");
+   const email = prompt("email");
+    const result = await fetch("http://localhost:1337/api/auth/local/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({ username: username, password: password, email:email }),
+    });
+    const body = await result.json();
+    console.log('the JWT token:', body.jwt);
+    jwt = body.jwt
+  await getUsers();
+  await getChannels();
+
+}
+authentic();
