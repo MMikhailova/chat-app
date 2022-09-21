@@ -5,49 +5,62 @@ const hEl=document.getElementById("recipient")
 const chatBox = document.getElementById("chat")
 const btnSubmit = document.getElementById("submitMsg")
 const messageText = document.getElementById("message");
+const regForm = document.getElementById("regForm");
+const logForm = document.getElementById("logForm");
 let activeChat = {}
-let jwt=''
+let jwt = ''
 
-async function getUsers() {
-    const response = await fetch(`http://localhost:1337/api/clients?populate=avatar`,{
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${jwt}`
-        }
-    });
-    const result = await response.json();
-    const users = result.data
-    console.log(users)
-    let liTag = "";
-    users.forEach((obj => {
-      const url = obj.attributes.avatar.data.attributes.formats.thumbnail.url;
-      liTag =
-        `<li onclick="openDM(event)"><span><img class="avatar" src="./${url}" alt=""></img></span> ${obj.attributes.name}</li>` +
-        liTag;
-    }))
-    ulMenuDm.innerHTML=liTag
+//either form or btn is displayed 
+function displayForm(str) {
+ document.querySelector(".authentication").style.display = "none";
+  str === "registration"?document.getElementById("registration").style.display = "flex" : document.getElementById("logInForm").style.display = "flex";
 }
-// getUsers();
+function closeForm(str) {
+ document.querySelector(".authentication").style.display = "flex";
+str === "registration"
+  ? (document.getElementById("registration").style.display = "none")
+  : (document.getElementById("logInForm").style.display = "none");
+}
+   
+//loading data about channels and users
+async function loadPage() {
+  //fetch users
+  const responseU = await fetch(
+    `http://localhost:1337/api/users?populate=avatar`
+  );
+  debugger;
+  const users= await responseU.json();
+  console.log(users);
+  ulMenuDm.innerHTML = createList(users);
+  //fetch channels
+  const responseC = await fetch(`http://localhost:1337/api/channels`)
+  const resultC = await responseC.json();
+  const channels = resultC.data;
+  ulMenuChannels.innerHTML = createChannelList(channels);
+}
+loadPage();
 
-async function getChannels() {
-  const response = await fetch(`http://localhost:1337/api/channels`,{
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${jwt}`
-        }
-    });
-  const result = await response.json();
-  const channels = result.data;
+
+function createList(users) {
   let liTag = "";
-  channels.forEach((obj) => {
+  users.forEach((user) => {
+    // const url = user.avatar.formats.thumbnail.url;
     liTag =
-      `<li onclick="openChat(event)">${obj.attributes.name}</li>` +
+      `<li onclick="openDM(event)"><span><img class="avatar" src="./" alt=""></img></span> ${user.username}</li>` +
       liTag;
-  });
-  ulMenuChannels.innerHTML = liTag;
-
+  })
+  return liTag;
 }
-// getChannels();
+
+function createChannelList(channels) {
+   let liTag = "";
+    channels.forEach((channel) => {
+      liTag =
+        `<li onclick="openChat(event)">${channel.attributes.name}</li>` +
+        liTag;
+    });
+  return liTag;
+}
 
    let coll = document.getElementsByClassName("collapsible");
     let i;
@@ -63,93 +76,132 @@ async function getChannels() {
       });
     }
 
-function openChat(event) {
-        hEl.innerHTML = `${event.target.innerText}`
-    const chatName = event.target.innerText;
-    getMessages(chatName)
-}
-
-async function getMessages(chatName){
-    const response = await fetch(
-      `http://localhost:1337/api/messages?populate=channel,sender&filters[channel][name][$eq]=${chatName}&sort[0]=timeStamp%3Aasc`,{
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${jwt}`
-        }
-    });
-    const result = await response.json();
-    const data = result.data;
-  console.log(data)
-  let divTag = ""
-  // if(data.length===0) return
-  data.forEach((obj => {
-        const timeStamp = new Date(obj.attributes.timeStamp)
-        const time = timeStamp.getHours() + ":" + timeStamp.getMinutes();
-        divTag = divTag +`<div class="wrapper">
-  <h3 id="sender">${obj.attributes.sender.data.attributes.name}</h3>
-  <br>
-  <p>${obj.attributes.Text}</p>
-  <span class="time-right">${time}</span>
-</div>`;
-    }))
-    chatBox.innerHTML = divTag
-    activeChat = {
-      id: `${data[0].attributes.channel.data.id}`,
-     name: `${data[0].attributes.channel.data.attributes.name}`,
-      type: "channel"
-    };
-}
-
-async function sendMessage() {
-  const userInput = messageText.value;
-  const formattedTime = new Date();
-  const body = {
-    data: {
-      Text: `${userInput}`,
-      timeStamp:formattedTime,
-      channel: {
-        id: activeChat.id,
-      },
-      sender: {
-        id: 1,
-      },
-    },
-  };
-  const url = `http://localhost:1337/api/messages`;
-  const response = await fetch(url, {
-    method: `POST`, 
+async function registration(e) {
+  e.preventDefault();
+  closeForm(regForm);
+  const response = await fetch("http://localhost:1337/api/auth/local/register", {
+    method: "POST",
     headers: {
-      "Authorization": `Bearer ${jwt}`,
       "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: JSON.stringify(body),
-  })
-    .then(() => { getMessages(activeChat.name) })
-  .catch(()=>alert('Please log in!'))
+    body: JSON.stringify({
+      username: e.target.elements.uname.value,
+      email: e.target.elements.eml.value,
+      password: e.target.elements.psw.value
+    })
+  });
+  const data = await response.json();
+  const newUser = data.user
+    console.log(newUser);
 }
 
-btnSubmit.addEventListener("click", function (e) {
-    e.preventDefault();
-    sendMessage()
-});
-
-async function authentic() {
-    const username = prompt("username");
-  const password = prompt("password");
-   const email = prompt("email");
-    const result = await fetch("http://localhost:1337/api/auth/local/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify({ username: username, password: password, email:email }),
+async function authentication(e) {
+  e.preventDefault();
+  closeForm('login');
+  const result = await fetch("http://localhost:1337/api/auth/local", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        body: JSON.stringify({ identifier: e.target.elements.uname.value, password: e.target.elements.psw.value})
     });
     const body = await result.json();
     console.log('the JWT token:', body.jwt);
-    jwt = body.jwt
-  await getUsers();
-  await getChannels();
-
+    jwt = body.jwt;
+    console.log('the result of the fetch', body);
 }
-authentic();
+
+
+
+// function openChat(event) {
+//         hEl.innerHTML = `${event.target.innerText}`
+//     const chatName = event.target.innerText;
+//     getMessages(chatName)
+// }
+
+// async function getMessages(chatName){
+//     const response = await fetch(
+//       `http://localhost:1337/api/messages?populate=channel,sender&filters[channel][name][$eq]=${chatName}&sort[0]=timeStamp%3Aasc`,{
+//         method: "GET",
+//         headers: {
+//             "Authorization": `Bearer ${jwt}`
+//         }
+//     });
+//     const result = await response.json();
+//     const data = result.data;
+//   console.log(data)
+//   let divTag = ""
+//   // if(data.length===0) return
+//   data.forEach((obj => {
+//         const timeStamp = new Date(obj.attributes.timeStamp)
+//         const time = timeStamp.getHours() + ":" + timeStamp.getMinutes();
+//         divTag = divTag +`<div class="wrapper">
+//   <h3 id="sender">${obj.attributes.sender.data.attributes.name}</h3>
+//   <br>
+//   <p>${obj.attributes.Text}</p>
+//   <span class="time-right">${time}</span>
+// </div>`;
+//     }))
+//     chatBox.innerHTML = divTag
+//     activeChat = {
+//       id: `${data[0].attributes.channel.data.id}`,
+//      name: `${data[0].attributes.channel.data.attributes.name}`,
+//       type: "channel"
+//     };
+// }
+
+// async function sendMessage() {
+//   const userInput = messageText.value;
+//   const formattedTime = new Date();
+//   const body = {
+//     data: {
+//       Text: `${userInput}`,
+//       timeStamp:formattedTime,
+//       channel: {
+//         id: activeChat.id,
+//       },
+//       sender: {
+//         id: 1,
+//       },
+//     },
+//   };
+//   const url = `http://localhost:1337/api/messages`;
+//   const response = await fetch(url, {
+//     method: `POST`, 
+//     headers: {
+//       "Authorization": `Bearer ${jwt}`,
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(body),
+//   })
+//     .then(() => { getMessages(activeChat.name) })
+//   .catch(()=>alert('Please log in!'))
+// }
+
+// btnSubmit.addEventListener("click", function (e) {
+//     e.preventDefault();
+//     sendMessage()
+// });
+
+// async function authentic() {
+//     const username = prompt("username");
+//   const password = prompt("password");
+//    const email = prompt("email");
+//     const result = await fetch("http://localhost:1337/api/auth/local/register", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         // 'Content-Type': 'application/x-www-form-urlencoded',
+//       },
+//       body: JSON.stringify({ username: username, password: password, email:email }),
+//     });
+//     const body = await result.json();
+//     console.log('the JWT token:', body.jwt);
+//     jwt = body.jwt
+//   await getUsers();
+//   await getChannels();
+
+// }
+// authentic();

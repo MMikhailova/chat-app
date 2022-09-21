@@ -17,23 +17,23 @@
       "required": true,
       "unique": true
     },
-    "members": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::client.client",
-      "inversedBy": "channels"
-    },
     "messages": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::message.message",
       "mappedBy": "channel"
     },
+    "members": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "channels"
+    },
     "owner": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::client.client",
-      "inversedBy": "channelCreated"
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "channel_createds"
     }
   }
 }
