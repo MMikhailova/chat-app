@@ -27,7 +27,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "channels"
+      "mappedBy": "channels"
     },
     "owner": {
       "type": "relation",

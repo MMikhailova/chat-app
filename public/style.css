@@ -58,14 +58,9 @@ li {
   border-radius: 50%;
 }
 
-.container:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 .chatBox {
   width: 75%;
-  background-color: white;
+   height: 900px;
 }
 .chatBox button { 
   text-align: center;
@@ -179,36 +174,40 @@ input[type="password"] {
   color: #999;
 }
 
-.column .chatBox {
-  position: relative;
+.message {
+  width:75%;
+  height: 150px;
+  background-color: white;
+  position: fixed;
+  right:0;
+  bottom: 0;
 }
 
-textarea {
+.message__text {
   position: absolute;
-  bottom: 0;
-  width: 950px;
-  height: 150px;
+  margin:auto;
+  width: 70%;
+  height: 200px;
   padding: 12px 20px;
   box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 4px;
   background-color: #f8f8f8;
   resize: none;
-}
-.msg {
-  display: inline-block;
-  position: relative;
-}
+} 
+
+
 #submitMsg {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  margin-top: 10px;
-  background-color: #777;
+  position: relative;
+  z-index: 1;
+  top: 65%;
+  left: 61.5%;
+  background-color: #73c1f1;
   color: white;
   cursor: pointer;
   padding: 18px;
   width: max-content;
+  height: fit-content;
   border: none;
   text-align: left;
   outline: none;
@@ -216,5 +215,5 @@ textarea {
 }
 
 #submitMsg:hover {
-  background-color: #555;
-}
+  background-color: #239ce8;
+} 

@@ -8,6 +8,7 @@ const messageText = document.getElementById("message");
 const regForm = document.getElementById("regForm");
 const logForm = document.getElementById("logForm");
 let activeChat = {}
+let activeUser = {}
 let jwt = ''
 
 //either form or btn is displayed 
@@ -28,7 +29,6 @@ async function loadPage() {
   const responseU = await fetch(
     `http://localhost:1337/api/users?populate=avatar`
   );
-  debugger;
   const users= await responseU.json();
   console.log(users);
   ulMenuDm.innerHTML = createList(users);
@@ -78,7 +78,7 @@ function createChannelList(channels) {
 
 async function registration(e) {
   e.preventDefault();
-  closeForm(regForm);
+  closeForm('registration');
   const response = await fetch("http://localhost:1337/api/auth/local/register", {
     method: "POST",
     headers: {
@@ -93,7 +93,8 @@ async function registration(e) {
   });
   const data = await response.json();
   const newUser = data.user
-    console.log(newUser);
+  console.log(newUser);
+  
 }
 
 async function authentication(e) {
@@ -108,51 +109,54 @@ async function authentication(e) {
         body: JSON.stringify({ identifier: e.target.elements.uname.value, password: e.target.elements.psw.value})
     });
     const body = await result.json();
-    console.log('the JWT token:', body.jwt);
+  console.log('the JWT token:', body.jwt);
+  activeUser=body.user
     jwt = body.jwt;
-    console.log('the result of the fetch', body);
+    console.log(activeUser);
 }
 
 
 
-// function openChat(event) {
-//         hEl.innerHTML = `${event.target.innerText}`
-//     const chatName = event.target.innerText;
-//     getMessages(chatName)
-// }
+function openChat(event) {
+  debugger;
+        hEl.innerHTML = `${event.target.innerText}`
+    const chatName = event.target.innerText;
+    getMessages(chatName)
+}
 
-// async function getMessages(chatName){
-//     const response = await fetch(
-//       `http://localhost:1337/api/messages?populate=channel,sender&filters[channel][name][$eq]=${chatName}&sort[0]=timeStamp%3Aasc`,{
-//         method: "GET",
-//         headers: {
-//             "Authorization": `Bearer ${jwt}`
-//         }
-//     });
-//     const result = await response.json();
-//     const data = result.data;
-//   console.log(data)
-//   let divTag = ""
-//   // if(data.length===0) return
-//   data.forEach((obj => {
-//         const timeStamp = new Date(obj.attributes.timeStamp)
-//         const time = timeStamp.getHours() + ":" + timeStamp.getMinutes();
-//         divTag = divTag +`<div class="wrapper">
-//   <h3 id="sender">${obj.attributes.sender.data.attributes.name}</h3>
-//   <br>
-//   <p>${obj.attributes.Text}</p>
-//   <span class="time-right">${time}</span>
-// </div>`;
-//     }))
-//     chatBox.innerHTML = divTag
-//     activeChat = {
-//       id: `${data[0].attributes.channel.data.id}`,
-//      name: `${data[0].attributes.channel.data.attributes.name}`,
-//       type: "channel"
-//     };
-// }
+async function getMessages(chatName){
+    const response = await fetch(
+      `http://localhost:1337/api/messages?populate=channel,sender&filters[channel][name][$eq]=${chatName}&sort[0]=timeStamp%3Aasc`,{
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${jwt}`
+        }
+    });
+    const result = await response.json();
+    const data = result.data;
+  console.log(data)
+  let divTag = ""
+  // if(data.length===0) return
+  data.forEach((obj => {
+        const timeStamp = new Date(obj.attributes.timeStamp)
+        const time = timeStamp.getHours() + ":" + timeStamp.getMinutes();
+        divTag = divTag +`<div class="wrapper">
+  <h3 id="sender">${obj.attributes.sender.data.attributes.username}</h3>
+  <br>
+  <p>${obj.attributes.Text}</p>
+  <span class="time-right">${time}</span>
+</div>`;
+    }))
+    chatBox.innerHTML = divTag
+    activeChat = {
+      id: `${data[0].attributes.channel.data.id}`,
+     name: `${data[0].attributes.channel.data.attributes.name}`,
+      type: "channel"
+    };
+}
 
-// async function sendMessage() {
+// async function sendMessage(e) {
+//   debugger;
 //   const userInput = messageText.value;
 //   const formattedTime = new Date();
 //   const body = {
@@ -163,7 +167,7 @@ async function authentication(e) {
 //         id: activeChat.id,
 //       },
 //       sender: {
-//         id: 1,
+//         id: activeUser.id ,
 //       },
 //     },
 //   };

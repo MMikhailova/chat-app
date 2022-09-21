@@ -19,12 +19,12 @@
         <div class="content">
             <ul id="users"></ul>
         </div>
-    </div>
+   </div>
     <div class="column chatBox">
 <!-- authentication:registration form and login -->
  <div class="authentication">
-<button onclick="displayForm('registration')" id="loginBtn">registration</button>
-<button onclick="displayForm('login')">login</button>
+<button onclick="displayForm('registration')" id="loginBtn">Registration</button>
+<button onclick="displayForm('login')">Login</button>
 </div>
      <!-- registration form  -->
     <div id="registration" class="logIn">
@@ -40,7 +40,7 @@
       <input type="Password" autocomplete="current-password" placeholder="Enter Password" name="psw" required>
 
       <label for="filename"><b>Avatar</b></label>
-      <input type="file" id="myFile" name="filename" required>
+      <input type="file" id="myFile" name="filename">
 
       <button type="submit">Login</button>
       <label>
@@ -71,14 +71,14 @@
   </form>
  </div>
 <h2 id="recipient"></h2>
-        <!-- <div id="chat">
+<div id="chat"></div>
             
-        </div> -->
-   <!-- <form id="msg">
-  <textarea id="message" name="msg_form">#All about API message...</textarea>
- <input id="submitMsg" type="submit" name="msg_form" value="Submit">
+        
+   <form class="message">
+  <textarea class="message__text" name="msg_form">#All about API message...</textarea>
+ <input id="submitMsg" class="message__input" type="submit" name="msg_form" value="Submit">
   </form>
-    -->
+   </div> 
     </div>
   <script src="./index.js"></script>
   
