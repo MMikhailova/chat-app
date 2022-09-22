@@ -74,9 +74,9 @@
 <div id="chat"></div>
             
         
-   <form class="message">
-  <textarea class="message__text" name="msg_form">#All about API message...</textarea>
- <input id="submitMsg" class="message__input" type="submit" name="msg_form" value="Submit">
+   <form onsubmit="sendMessage(event)" class="message">
+  <textarea class="message__text" name="text">#All about API message...</textarea>
+ <input id="submitMsg" class="message__input" type="submit" name="input" value="Submit">
   </form>
    </div> 
     </div>

@@ -155,38 +155,38 @@ async function getMessages(chatName){
     };
 }
 
-// async function sendMessage(e) {
-//   debugger;
-//   const userInput = messageText.value;
-//   const formattedTime = new Date();
-//   const body = {
-//     data: {
-//       Text: `${userInput}`,
-//       timeStamp:formattedTime,
-//       channel: {
-//         id: activeChat.id,
-//       },
-//       sender: {
-//         id: activeUser.id ,
-//       },
-//     },
-//   };
-//   const url = `http://localhost:1337/api/messages`;
-//   const response = await fetch(url, {
-//     method: `POST`, 
-//     headers: {
-//       "Authorization": `Bearer ${jwt}`,
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(body),
-//   })
-//     .then(() => { getMessages(activeChat.name) })
-//   .catch(()=>alert('Please log in!'))
-// }
+async function sendMessage(e) {
+  e.preventDefault();
+const userInput=e.target.elements.text.value
+const formattedTime = new Date();
+  const body = {
+    data: {
+      Text: `${userInput}`,
+      timeStamp:formattedTime,
+      channel: {
+        id: activeChat.id,
+      },
+      sender: {
+        id: activeUser.id ,
+      },
+    },
+  };
+  const url = `http://localhost:1337/api/messages`;
+  const response = await fetch(url, {
+    method: `POST`, 
+    headers: {
+      "Authorization": `Bearer ${jwt}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+    .then(() => { getMessages(activeChat.name) })
+  .catch(()=>alert('Please log in!'))
+}
 
-// btnSubmit.addEventListener("click", function (e) {
-//     e.preventDefault();
-//     sendMessage()
+// btnSubmit.addEventListener("click", function (event) {
+//     event.preventDefault();
+//     sendMessage(event)
 // });
 
 // async function authentic() {
