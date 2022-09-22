@@ -94,6 +94,7 @@ async function registration(e) {
   const data = await response.json();
   const newUser = data.user
   console.log(newUser);
+   loadPage(); 
   
 }
 
@@ -119,7 +120,8 @@ async function authentication(e) {
 
 function openChat(event) {
   debugger;
-        hEl.innerHTML = `${event.target.innerText}`
+  if (jwt === ''){return alert("Please register or login"); }
+  hEl.innerHTML = `${event.target.innerText}`
     const chatName = event.target.innerText;
     getMessages(chatName)
 }
