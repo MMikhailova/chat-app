@@ -12,23 +12,73 @@
     <div class="column menu">
         <button class="collapsible">Channels</button>
         <div class="content">
-            <ul id="channels">
-            
+            <ul id="channels"></ul> 
             </ul>
         </div>
         <button class="collapsible">Direct messages</button>
         <div class="content">
             <ul id="users"></ul>
         </div>
-    </div>
+   </div>
     <div class="column chatBox">
-        <h2 id="recipient"></h2>
-        <div id="chat"></div>
-   <form id="msg">
-  <textarea id="message" name="msg_form">#All about API message...</textarea>
- <input id="submitMsg" type="submit" name="msg_form" value="Submit">
+<!-- authentication:registration form and login -->
+ <div class="authentication">
+<button onclick="displayForm('registration')" id="loginBtn">Registration</button>
+<button onclick="displayForm('login')">Login</button>
+</div>
+     <!-- registration form  -->
+    <div id="registration" class="logIn">
+        <form onsubmit="registration(event)">
+    <div class="logIn__credentials">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" autocomplete="username" placeholder="Enter Username" name="uname" required>
+      
+      <label for="eml"><b>Email</b></label>
+      <input type="email" autocomplete="email" placeholder="Enter Email address" name="eml" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="Password" autocomplete="current-password" placeholder="Enter Password" name="psw" required>
+
+      <label for="filename"><b>Avatar</b></label>
+      <input type="file" id="myFile" name="filename">
+
+      <button type="submit">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+    <div class="logIn__cancel" style="background-color:#f1f1f1">
+      <button id="regForm" type="button" onclick="closeForm('registration')">Cancel</button>
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
   </form>
-   
+ </div>
+ 
+ <!-- login form  -->
+    <div id="logInForm" class="logIn">
+        <form onsubmit="authentication(event)">
+    <div class="logIn__credentials">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" autocomplete="username" placeholder="Enter Username" name="uname" required>
+      <label for="psw"><b>Password</b></label>
+      <input type="Password" autocomplete="current-password" placeholder="Enter Password" name="psw" required>
+      <button type="submit">Login</button>
+    </div>
+    <div class="logIn__cancel" style="background-color:#f1f1f1">
+      <button id="logForm"  type="button" onclick="closeForm('login')">Cancel</button>
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+  </form>
+ </div>
+<h2 id="recipient"></h2>
+<div id="chat"></div>
+            
+        
+   <form onsubmit="sendMessage(event)" class="message">
+  <textarea class="message__text" name="text">#All about API message...</textarea>
+ <input id="submitMsg" class="message__input" type="submit" name="input" value="Submit">
+  </form>
+   </div> 
     </div>
   <script src="./index.js"></script>
   

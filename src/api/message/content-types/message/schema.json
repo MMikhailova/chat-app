@@ -30,23 +30,23 @@
     "timeStamp": {
       "type": "datetime"
     },
-    "sender": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::client.client",
-      "inversedBy": "messages"
-    },
-    "recipient": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::client.client",
-      "inversedBy": "received"
-    },
     "channel": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::channel.channel",
       "inversedBy": "messages"
+    },
+    "sender": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "sentMsg"
+    },
+    "recipient": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "receivedMsg"
     }
   }
 }
