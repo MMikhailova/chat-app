@@ -7,42 +7,41 @@ const App = () => {
     const { users } = useUsers();
     const { channels } = useChannels()
     const [openForm, setOpenForm] = useState(false)
-    const [activeForm, setActiveForm]=useState(null)
+    const [activeForm, setActiveForm] = useState(null)
+    const [person, setPerson] = useState({username:"", email:"", password:""})
     const formDetails = (e) => {
         setOpenForm(true)
         setActiveForm(e.target.id);
         
     }
-    const onSubmit = (entrance) => {
-        const username = entrance.target.exampleInputText1.value;
-        console.log(username)
-     }
-    
+    const handleSubmit = (e) => {
+    setPerson((prevState) => ({...prevState,
+    username: `${e.target.username.value}`,
+    email: `${e.target.email.value}`,
+    password: `${e.target.password.value}`}));
+    console.log(person);
+    }
+
     return (
-      <div className="container-fluid">
+    <div className="container-fluid">
         <div className="row">
-          <SideBar users={users} channels={channels} />
-          <div className="col-10 min-vh-100">
-            <button
-              className="btn btn-outline-primary me-1"
-              id="login"
-              style={{ float: "right" }}
-              onClick={(e) => formDetails(e)}
-            >
-              Login
-            </button>
-            <button
-              className="btn btn-outline-primary me-1"
-              id="signUp"
-              style={{ float: "right" }}
-              onClick={(e) => formDetails(e)}
-            >
-              Sign up
-            </button>
-                    <Form open={openForm} activeForm={activeForm} onSubmit={onSubmit} />
-          </div>
+        <SideBar users={users} channels={channels} />
+        <div className="col-10 min-vh-100">
+        <button
+            className="btn btn-outline-primary me-1"
+            id="login"
+            style={{ float: "right" }}
+            onClick={(e) => formDetails(e)}>Login</button>
+        <button
+            className="btn btn-outline-primary me-1"
+            id="signUp"
+            style={{ float: "right" }}
+            onClick={(e) => formDetails(e)}
+            >Sign up</button>
+        <Form open={openForm} activeForm={activeForm} onSubmit={handleSubmit} />
         </div>
-      </div>
+        </div>
+    </div>
     );
 }
 export default App;
