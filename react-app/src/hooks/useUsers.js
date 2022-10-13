@@ -30,3 +30,28 @@ export const useChannels = () => {
    
   return { channels};
 };
+ 
+// export const signUp = ({ person }) => {
+//   const [newUser,setNewUser]=useState([])
+//   useEffect(() => {
+//             fetch("http://localhost:1337/api/auth/local/register", {
+//                 method: "POST",
+//                 headers: {
+//                     "Content-Type": "application/json",
+//                     // 'Content-Type': 'application/x-www-form-urlencoded',
+//                 },
+//                 body: JSON.stringify({
+//                     username: person.username,
+//                     email: person.email,
+//                     password: person.password
+//                 }),
+//             })
+//                 .then((e) => e.json())
+//                 .then((response) => {
+//                     console.log(response);
+//                     const data = response;
+//                     setNewUser(data);
+//                 })
+//   }, [person])
+//   return {newUser}
+//     }

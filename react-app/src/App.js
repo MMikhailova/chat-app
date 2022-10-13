@@ -1,27 +1,25 @@
 
-import { useState } from "react";
+import {  useState } from "react";
+
 import Form from "./components/Form.js";
 import SideBar from "./components/SideBar.js";
-import { useChannels, useUsers } from "./hooks/useUsers";
+import { useChannels, useUsers} from "./hooks/useUsers";
+
 const App = () => {
     const { users } = useUsers();
     const { channels } = useChannels()
     const [openForm, setOpenForm] = useState(false)
     const [activeForm, setActiveForm] = useState(null)
-    const [person, setPerson] = useState({username:"", email:"", password:""})
     const formDetails = (e) => {
         setOpenForm(true)
         setActiveForm(e.target.id);
         
     }
-    const handleSubmit = (e) => {
-    setPerson((prevState) => ({...prevState,
-    username: `${e.target.username.value}`,
-    email: `${e.target.email.value}`,
-    password: `${e.target.password.value}`}));
-    console.log(person);
+    const handleSubmit = (person) => {
+        console.log(person)
     }
-
+    
+    
     return (
     <div className="container-fluid">
         <div className="row">
