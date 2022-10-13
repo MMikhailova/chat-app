@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+
 export default function Form({ open, activeForm, onSubmit }) {
     const [person, setPerson] = useState({
       username: "",

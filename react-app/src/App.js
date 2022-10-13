@@ -1,5 +1,5 @@
 
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 
 import Form from "./components/Form.js";
 import SideBar from "./components/SideBar.js";
@@ -10,15 +10,38 @@ const App = () => {
     const { channels } = useChannels()
     const [openForm, setOpenForm] = useState(false)
     const [activeForm, setActiveForm] = useState(null)
+    const [account, setAccount] = useState({})
+    const [newUser, setNewUser] = useState([])
     const formDetails = (e) => {
         setOpenForm(true)
         setActiveForm(e.target.id);
         
     }
     const handleSubmit = (person) => {
-        console.log(person)
+        setAccount(person)
     }
-    
+    useEffect(() => {
+        fetch("http://localhost:1337/api/auth/local/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+                username: account.username,
+                email: account.email,
+                password:account.password
+            }),
+        })
+            .then((e) => e.json())
+            .then((response) => {
+                console.log(response);
+                const data = response;
+                setNewUser(data);
+            })
+    }, [account])
+  
+
     
     return (
     <div className="container-fluid">
