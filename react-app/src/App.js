@@ -44,25 +44,37 @@ const App = () => {
 
     
     return (
-    <div className="container-fluid">
-        <div className="row">
-        <SideBar users={users} channels={channels} />
-        <div className="col-10 min-vh-100">
-        <button
+      <div
+        className="d-flex text-white"
+        style={{ height: "100vh", backgroundColor: "#133d44" }}
+      >
+        <div className="p-2 text-white" style={{ maxWidth: "200px" }}>
+          <SideBar users={users} channels={channels} />
+        </div>
+        <div className="p-2 w-100" style={{ backgroundColor: "#22d1f8" }}>
+          <button
             className="btn btn-outline-primary me-1"
             id="login"
             style={{ float: "right" }}
-            onClick={(e) => formDetails(e)}>Login</button>
-        <button
+            onClick={(e) => formDetails(e)}
+          >
+            Login
+          </button>
+          <button
             className="btn btn-outline-primary me-1"
             id="signUp"
             style={{ float: "right" }}
             onClick={(e) => formDetails(e)}
-            >Sign up</button>
-        <Form open={openForm} activeForm={activeForm} onSubmit={handleSubmit} />
+          >
+            Sign up
+          </button>
+          <Form
+            open={openForm}
+            activeForm={activeForm}
+            onSubmit={handleSubmit}
+          />
         </div>
-        </div>
-    </div>
+      </div>
     );
 }
 export default App;

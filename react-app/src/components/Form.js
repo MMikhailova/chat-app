@@ -34,7 +34,7 @@ export default function Form({ open, activeForm, onSubmit }) {
                     username: e.target.value,
                   });
                 }}
-                aria-describedby="emailHelp"
+                aria-describedby="usernameHelp"
                 required
               ></input>
             </div>
